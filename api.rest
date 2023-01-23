@@ -1,0 +1,27 @@
+GET http://localhost:8000/api/pemasukan/
+###
+GET http://localhost:8000/api/pengeluaran/3
+###
+GET http://localhost:8000/api/laporan
+
+###
+POST http://localhost:8000/api/pemasukan
+###
+POST http://localhost:8000/api/pengeluaran
+###
+POST http://localhost:8000/api/laporan
+
+###
+PUT http://localhost:8000/api/pemasukan
+###
+PUT http://localhost:8000/api/pengeluaran/2
+###
+PUT http://localhost:8000/api/laporan/1
+
+###
+DELETE  http://localhost:8000/api/pemasukan/1
+###
+DELETE  http://localhost:8000/api/pengeluaran/1
+###
+DELETE  http://localhost:8000/api/laporan/1
+
