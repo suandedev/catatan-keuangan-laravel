@@ -4,10 +4,48 @@ namespace App\Http\Controllers;
 
 use App\Models\Laporan;
 use App\Models\Pemasukan;
+use App\Models\Pengeluaran;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use PhpParser\Node\Stmt\Foreach_;
 
 class LaporanController extends Controller
 {
+
+    public function __construct(){
+        $pemasukan = Pemasukan::whereDate('created_at', '2023-01-24')->sum('jumlah');
+        $this->setPemasukan($pemasukan);
+        $pengeluaran = Pengeluaran::whereDate('created_at', '2023-01-23')->sum('jumlah');
+        $this->setPengeluaran($pengeluaran);
+        $this->setSelisih($pemasukan - $pengeluaran);
+    }
+
+    private $pemasukan, $pengeluaran, $selisih;
+
+    private function setPemasukan($pemasukan){
+        $this->pemasukan = $pemasukan;
+    }
+
+    private function setPengeluaran($pengeluaran){
+        $this->pengeluaran = $pengeluaran;
+    }
+
+    private function setSelisih($selisih){
+        $this->selisih = $selisih;
+    }
+
+    private function getPemasukan(){
+        return $this->pemasukan;
+    }
+
+    private function getPengeluaran(){
+        return $this->pengeluaran;
+    }
+
+    private function getSelisih(){
+        return $this->selisih;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -15,8 +53,7 @@ class LaporanController extends Controller
      */
     public function index()
     {
-        $laporans = Laporan::all();
-        return json_encode($laporans);
+        return json_encode($this->getSelisih());
     }
 
     /**
@@ -37,14 +74,7 @@ class LaporanController extends Controller
      */
     public function store(Request $request)
     {
-        $data = [
-            'tot_masuk' => 5000,
-            'tot_keluar' => 2000,
-            'selisih' => 3000,
-        ];
 
-        Pemasukan::create($data);
-        return json_encode($data);
     }
 
     /**
@@ -53,9 +83,9 @@ class LaporanController extends Controller
      * @param  \App\Models\Laporan  $laporan
      * @return \Illuminate\Http\Response
      */
-    public function show(Laporan $laporan)
+    public function show()
     {
-        return $laporan->toJson();
+        return $this->getSelisih();
     }
 
     /**
